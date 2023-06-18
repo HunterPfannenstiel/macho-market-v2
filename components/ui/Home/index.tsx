@@ -4,6 +4,7 @@ import { FunctionComponent } from "react";
 import classes from "./Home.module.css";
 import useCurrencies from "@_hooks/useCurrencies";
 import Activity from "./Activity";
+import CurrencyList from "../Reusable/Token/Currency/CurrencyList";
 
 interface HomeProps {}
 
@@ -13,10 +14,8 @@ const Home: FunctionComponent<HomeProps> = () => {
   if (currencies.length === 0) return <p>Loading</p>;
   return (
     <>
-      {currencies.map((currency) => {
-        return <p style={{ color: currency.color }}>{currency.ticker}</p>;
-      })}
-      <Activity />
+      <CurrencyList currencies={currencies} />
+      {/* <Activity /> */}
     </>
   );
 };

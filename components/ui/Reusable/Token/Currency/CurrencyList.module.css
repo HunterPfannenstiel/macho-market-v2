@@ -1,0 +1,10 @@
+.currency_list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 1rem;
+}
+
+.currency_li {
+    position: relative;
+}

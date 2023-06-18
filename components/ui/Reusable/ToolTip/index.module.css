@@ -1,0 +1,15 @@
+.tooltip {
+    clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%);
+    transition: all .25s ease-in-out;
+    position: absolute;
+    /* top: -75%;
+    left: 50%;
+    transform: translateX(-50%); */
+}
+
+.open {
+    clip-path: polygon(5% 1%, 95% 0, 100% 9%, 100% 90%, 94% 100%, 5% 100%, 0 89%, 0 13%);
+    background: rgba(0, 0, 0, 0.2);
+    transition: all .25s ease-in-out;
+    cursor: pointer;
+}

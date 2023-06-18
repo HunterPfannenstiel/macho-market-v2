@@ -17,10 +17,12 @@ export type ContractType =
 export type Currency = {
   currency_id: number;
   decimals: number;
-  color: string;
+  fill_color: string;
+  border_color: string;
   image: string;
   ticker: string;
   token_type: ContractType;
+  address: string;
 };
 
 export type Collection = {
