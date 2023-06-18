@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "genContractType": "abi-types-generator './public/contracts/MachoFaucet.json' --output='./types' --name=MachoFaucetContract --provider=ethers_v5"
   },
   "dependencies": {
+    "@metamask/providers": "^11.0.0",
     "@tanstack/react-query": "^4.29.14",
     "@web3modal/ethereum": "^2.4.6",
     "@web3modal/react": "^2.4.6",
@@ -29,6 +31,7 @@
     "@types/react-dom": "18.2.5",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.5",
+    "ethereum-abi-types-generator": "^1.3.2",
     "typescript": "5.1.3"
   }
 }
