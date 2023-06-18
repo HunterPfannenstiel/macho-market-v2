@@ -1,0 +1,4 @@
+.activity {
+    max-height: 100px;
+    overflow: scroll;
+}

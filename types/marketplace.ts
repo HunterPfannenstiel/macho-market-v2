@@ -47,3 +47,9 @@ export type LogEntry = {
   seller: string;
   buyer: string | null;
 };
+
+export type PageFetcher<T, U> = (
+  page: number,
+  date: string,
+  dependency?: T
+) => Promise<U>;

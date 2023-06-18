@@ -1,4 +1,6 @@
+import Providers from "@_providers/Providers";
 import { WalletModal } from "../components/providers/Web3Config";
+import "../styles/globals.css";
 
 export default function RootLayout({
   // Layouts must accept a children prop.
@@ -11,7 +13,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div id="modal"></div>
-        {children}
+        <Providers>{children}</Providers>
         {/* <WalletModal /> */}
       </body>
     </html>

@@ -6,10 +6,9 @@ const handler: NextApiHandler = async (req, res) => {
   try {
     if (req.method === "GET") {
       const { activeFilter } = req.query;
-      stringCheck(activeFilter);
-      const currencies = await getCurrencies(
-        parseUndefinedToNull(activeFilter)
-      );
+      let filter = parseUndefinedToNull(activeFilter);
+      if (filter) stringCheck(filter);
+      const currencies = await getCurrencies(filter);
       return res.status(200).json(currencies);
     } else {
       return res.status(400).json({ message: "Invalid method" });

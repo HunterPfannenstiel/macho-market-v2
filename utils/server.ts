@@ -14,7 +14,7 @@ export const stringCheck = (...variables: any) => {
 export const optionalStringCheck = (...variables: any) => {
   variables.forEach((variable: any) => {
     variable = parseUndefinedToNull(variable);
-    if (typeof variable !== "string" || !!variable) {
+    if (typeof variable !== "string" && !!variable) {
       throw new ServerError(
         `Variable is not a valid type, variable value received: ${variable}`,
         400

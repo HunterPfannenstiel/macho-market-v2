@@ -1,10 +1,17 @@
+import Home from "components/ui/Home";
+import Link from "next/link";
 import { FunctionComponent } from "react";
-import classes from "./Home.module.css";
 
-interface HomeProps {}
+interface HomePageProps {}
 
-const Home: FunctionComponent<HomeProps> = () => {
-  return <h1>Hello</h1>;
+const HomePage: FunctionComponent<HomePageProps> = () => {
+  return (
+    <>
+      <h1>Home Page</h1>
+      <Link href={"/collections"}>Collections</Link>
+      <Home />
+    </>
+  );
 };
 
-export default Home;
+export default HomePage;
