@@ -26,10 +26,11 @@ const NumberInput: FunctionComponent<NumberInputProps> = ({
       className={classN}
       onChange={(e) => {
         const val = +e.target.value;
-        if (max && val > max) {
+        console.log(val);
+        if (max !== undefined && val > max) {
           onChange(max);
           setValue(max);
-        } else if (min && val < min) {
+        } else if (min !== undefined && val < min) {
           onChange(min);
           setValue(min);
         } else {

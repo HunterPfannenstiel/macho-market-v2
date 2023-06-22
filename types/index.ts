@@ -4,3 +4,7 @@ export type ModalProps = {
   toggle: () => void;
   animationTime?: number;
 };
+
+export type Selections = {
+  [id: number]: boolean;
+};

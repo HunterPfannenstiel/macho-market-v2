@@ -1,7 +1,6 @@
 import { useMetaMask } from "@_providers/Metamask";
 import { MachoFaucetContract } from "@_types/MachoFaucetContract";
 import { loadContract } from "@_utils/web3/contract";
-import { BaseContract } from "ethers";
 import { useEffect, useState } from "react";
 
 const useFaucet = () => {

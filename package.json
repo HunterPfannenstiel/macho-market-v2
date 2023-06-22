@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "genContractType": "abi-types-generator './public/contracts/MachoFaucet.json' --output='./types' --name=MachoFaucetContract --provider=ethers_v5"
+    "genContractType": "abi-types-generator './public/contracts/MachoVerse.json' --output='./types' --name=MachoverseContract --provider=ethers_v5"
   },
   "dependencies": {
     "@metamask/providers": "^11.0.0",

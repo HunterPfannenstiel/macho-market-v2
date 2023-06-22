@@ -8,3 +8,7 @@
     color: var(--primary-blue);
     margin: 0;
 }
+
+.button:disabled {
+    opacity: 0.75;
+}

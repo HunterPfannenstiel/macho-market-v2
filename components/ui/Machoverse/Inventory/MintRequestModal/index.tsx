@@ -5,23 +5,32 @@ import { ModalProps } from "@_types/index";
 import RequestItemList from "./RequestItemList";
 import { MachoToken, TransactionInfo, UserToken } from "@_types/machoverse";
 import Button from "components/ui/Reusable/Buttons/Button";
+import { BrowserProvider } from "ethers";
 
 interface MintRequestModalProps {
   modalProps: ModalProps;
   selectedTokens: MachoToken[];
+  onConfirmMint: (details: TransactionInfo) => void;
+  provider: BrowserProvider | null;
+  selectedTokenValues: { [id: number]: number };
+  updateSelectedTokenValue: (id: number, amount: number) => void;
 }
 
 const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
   modalProps,
   selectedTokens,
+  onConfirmMint,
+  provider,
+  selectedTokenValues,
+  updateSelectedTokenValue,
 }) => {
-  const tokenValues = useRef<{ [id: number]: number }>({});
-  const updateTokenValue = (id: number, value: number) => {
-    tokenValues.current[id] = value;
-  };
   const onCreateRequest = async () => {
-    const tokens: UserToken[] = Object.keys(tokenValues.current).map((key) => {
-      return { tokenId: +key, amount: tokenValues.current[+key] };
+    if (!provider) {
+      console.log("Please connect wallet");
+      return;
+    }
+    const tokens: UserToken[] = Object.keys(selectedTokenValues).map((key) => {
+      return { tokenId: +key, amount: selectedTokenValues[+key] };
     });
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/mint`,
@@ -36,18 +45,20 @@ const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
     if (!res.ok) {
       console.log("Error!", data);
     } else {
-      const { data: rawData, signature } = data as TransactionInfo;
-      console.log(data);
+      onConfirmMint(data as TransactionInfo);
     }
-    console.log(tokenValues);
   };
   return (
     <Modal modalProps={modalProps} className={classes.modal}>
-      <RequestItemList
-        tokens={selectedTokens}
-        updateTokenValue={updateTokenValue}
-      />
-      <Button onClick={onCreateRequest}>Create Request</Button>
+      <div className={classes.item_list}>
+        <RequestItemList
+          tokens={selectedTokens}
+          updateTokenValue={updateSelectedTokenValue}
+        />
+      </div>
+      <Button onClick={onCreateRequest} className={classes.create_button}>
+        Create Request
+      </Button>
     </Modal>
   );
 };

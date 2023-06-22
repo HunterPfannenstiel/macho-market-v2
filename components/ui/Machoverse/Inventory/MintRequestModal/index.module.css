@@ -1,3 +1,17 @@
 .modal {
     width: 90%;
+    min-height: 90%;
+    background-color: var(--accent-blue);
+    text-align: center;
+    border-radius: 10px;
+}
+
+.item_list {
+    max-height: 70%;
+    overflow-y: scroll;
+}
+
+.create_button {
+    width: 75%;
+    font-size: 1.25rem;
 }

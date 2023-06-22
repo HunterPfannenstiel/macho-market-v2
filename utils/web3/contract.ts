@@ -1,3 +1,4 @@
+import { MachoverseContract } from "@_types/machoverse/MachoverseContract";
 import { BrowserProvider, ethers } from "ethers";
 
 const NETWORK_ID = process.env.NEXT_PUBLIC_NETWORK_ID;
@@ -20,4 +21,13 @@ export const loadContract = async (name: string, provider: BrowserProvider) => {
       `Contract: [${name}] has not been deployed to Network: [${NETWORK_ID}]`
     );
   }
+};
+
+export const loadMachoverse = async (provider: BrowserProvider) => {
+  const contract = await loadContract("MachoVerse", provider);
+  const signer = await provider.getSigner();
+  const signedContract = contract.connect(
+    signer
+  ) as unknown as MachoverseContract;
+  return signedContract;
 };

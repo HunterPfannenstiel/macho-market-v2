@@ -6,15 +6,17 @@ import { MachoToken } from "@_types/machoverse";
 
 interface RequestItemProps {
   token: MachoToken;
-  onValueChange: (id: number, value: number) => void;
+  onValueChange?: (id: number, value: number) => void;
+  showNumberInput?: boolean;
 }
 
 const RequestItem: FunctionComponent<RequestItemProps> = ({
   token,
   onValueChange,
+  showNumberInput = true,
 }) => {
   const onChange = (value: number) => {
-    onValueChange(token.tokenId, value);
+    onValueChange && onValueChange(token.tokenId, value);
   };
   const classN =
     token.type === "coin"
@@ -27,12 +29,16 @@ const RequestItem: FunctionComponent<RequestItemProps> = ({
       </div>
       <p className={classes.name}>{token.name}</p>
       <div className={classes.input}>
-        <NumberInput
-          onChange={onChange}
-          className={classes.num_input}
-          max={token.amount}
-        />
-        <span>/</span>
+        {showNumberInput && (
+          <>
+            <NumberInput
+              onChange={onChange}
+              className={classes.num_input}
+              max={token.amount}
+            />
+            <span>/</span>
+          </>
+        )}
         <p>{token.amount}</p>
       </div>
     </div>

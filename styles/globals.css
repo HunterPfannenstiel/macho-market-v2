@@ -37,6 +37,11 @@ h1, h2, h3, h4, h5, p {
   margin: 0;
 }
 
+.item_container {
+  padding: 1rem 0.5rem;
+  border-radius: 1rem;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

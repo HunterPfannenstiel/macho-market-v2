@@ -2,11 +2,12 @@ import { FunctionComponent } from "react";
 import classes from "./InventoryTokenList.module.css";
 import { MachoToken } from "@_types/machoverse";
 import InventoryToken from "./InventoryToken";
+import { Selections } from "@_types/index";
 
 interface InventoryTokenListProps {
   tokens: MachoToken[];
   onTokenClicked: (id: number) => void;
-  selectedTokenIds?: { [id: number]: boolean };
+  selectedTokenIds?: Selections;
 }
 
 const InventoryTokenList: FunctionComponent<InventoryTokenListProps> = ({
