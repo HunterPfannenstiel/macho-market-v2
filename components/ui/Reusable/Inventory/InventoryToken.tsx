@@ -38,6 +38,7 @@ const InventoryToken: FunctionComponent<InventoryTokenProps> = ({
             thickness="2px"
             borderColor={token.colors.borderColor}
             fillColor={token.colors.fillColor}
+            sway={false}
           />
         )}
         {token.type === "item" && (

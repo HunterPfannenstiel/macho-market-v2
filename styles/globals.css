@@ -1,9 +1,21 @@
+@import url("https://use.typekit.net/jvc8nhk.css");
+
+
+* {
+  box-sizing: border-box;
+  --primary-font: museo-sans-rounded, sans-serif;
+  --primary-blue: #101827;
+  --accent-blue: #162236;
+  --primary-yellow: #E9C33D;
+  color: #FFFFFF;
+}
+
 html,
 body {
+  background-color: var(--primary-blue);
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: var(--primary-font)
 }
 
 a {
@@ -11,14 +23,14 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 ul {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+p {
+  font-weight: 500;
 }
 
 h1, h2, h3, h4, h5, p {

@@ -7,6 +7,7 @@ type TokenProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   blur?: boolean;
   selected?: boolean;
+  sway?: boolean;
 } & CSSToken;
 
 const Token: FunctionComponent<TokenProps> = ({
@@ -19,6 +20,7 @@ const Token: FunctionComponent<TokenProps> = ({
   lineSpace,
   blur,
   selected,
+  sway = true,
   onClick,
 }) => {
   const style = {
@@ -38,6 +40,7 @@ const Token: FunctionComponent<TokenProps> = ({
   } else {
     coinClassName = `${classes.oval_container} ${classes.selected}`;
   }
+  if (sway) coinClassName += " " + classes.sway;
 
   return (
     <button className={coinClassName} style={style} onClick={onClick}>

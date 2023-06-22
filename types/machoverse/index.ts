@@ -25,3 +25,8 @@ type TokenColor = {
   borderColor: string;
   fillColor: string;
 };
+
+export type TransactionInfo = {
+  data: string;
+  signature: string;
+};

@@ -17,14 +17,17 @@
     position: relative;
     height: calc(var(--diameter) + var(--thickness) * 2);
     width: var(--diameter);
-    transform: rotateZ(-90deg);
+    transform: translateY(5%) rotateZ(-90deg);
     rotate: y -35deg;
-    animation: RotateCoin 4s ease-in-out alternate infinite;
     transition: all var(--transition-time) ease-in-out;
     margin: 0;
     cursor: pointer;
     background-color: transparent;
     border: none;
+}
+
+.sway {
+    animation: RotateCoin 4s ease-in-out alternate infinite;
 }
 
 .oval {

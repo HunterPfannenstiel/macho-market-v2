@@ -6,7 +6,7 @@ import InventoryToken from "./InventoryToken";
 interface InventoryTokenListProps {
   tokens: MachoToken[];
   onTokenClicked: (id: number) => void;
-  selectedTokenIds?: number[];
+  selectedTokenIds?: { [id: number]: boolean };
 }
 
 const InventoryTokenList: FunctionComponent<InventoryTokenListProps> = ({
@@ -17,10 +17,9 @@ const InventoryTokenList: FunctionComponent<InventoryTokenListProps> = ({
   return (
     <ul className={classes.tokens}>
       {tokens.map((token) => {
-        const selected =
-          selectedTokenIds && selectedTokenIds.length > 0
-            ? selectedTokenIds.includes(token.tokenId)
-            : false;
+        const selected = !!(
+          selectedTokenIds && selectedTokenIds[token.tokenId]
+        );
         return (
           <InventoryToken
             token={token}

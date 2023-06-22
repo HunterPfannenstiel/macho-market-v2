@@ -1,25 +1,23 @@
 import { CSSProperties, FunctionComponent, ReactNode } from "react";
+import { ModalProps as MProps } from "@_types/index";
 import classes from "./index.module.css";
 import Background from "./Background";
 import ModalPortal from "./ModalPortal";
 
 interface ModalProps {
   children: ReactNode;
-  handleModal: () => void;
-  playAnimation: boolean;
+  modalProps: MProps;
   className?: string;
-  animationTime?: number;
   selector?: string;
 }
 
 const Modal: FunctionComponent<ModalProps> = ({
   children,
-  handleModal,
-  playAnimation,
+  modalProps,
   className,
-  animationTime = 300,
   selector = "modal",
 }) => {
+  const { playAnimation, toggle, animationTime } = modalProps;
   let classN = className
     ? `${classes.modal_content} ${className}`
     : classes.modal_content;
@@ -29,17 +27,19 @@ const Modal: FunctionComponent<ModalProps> = ({
     <ModalPortal selector={selector}>
       <div
         className={classN}
-        style={{ "--animation-time": animationTime + "ms" } as CSSProperties}
+        style={
+          { "--animation-time": (animationTime || 300) + "ms" } as CSSProperties
+        }
       >
-        <p className={classes.close} onClick={handleModal}>
+        <p className={classes.close} onClick={toggle}>
           X
         </p>
         {children}
       </div>
       <Background
-        handleModal={handleModal}
+        handleModal={toggle}
         playAnimation={playAnimation}
-        animationTime={animationTime}
+        animationTime={animationTime || 300}
       />
     </ModalPortal>
   );

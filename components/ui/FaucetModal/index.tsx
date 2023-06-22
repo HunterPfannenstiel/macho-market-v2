@@ -11,7 +11,7 @@ interface FaucetModalProps {}
 
 const FaucetModal: FunctionComponent<FaucetModalProps> = () => {
   const currencies = useCurrencies();
-  const { toggle, showModal, playAnimation } = useAnimateModal();
+  const faucetModal = useAnimateModal();
   const faucetContract = useFaucet();
   const selectedCurrency = useRef(1);
   const onSelectedCurrency = (currencyId: number) => {
@@ -43,14 +43,9 @@ const FaucetModal: FunctionComponent<FaucetModalProps> = () => {
       }
     }
   };
-  if (showModal) {
+  if (faucetModal.showModal) {
     return (
-      <Modal
-        animationTime={300}
-        handleModal={toggle}
-        playAnimation={playAnimation}
-        className={classes.container}
-      >
+      <Modal modalProps={faucetModal} className={classes.container}>
         <h2>Need Tokens?</h2>
         <h2>Get some from the faucet!</h2>
         <CurrencyList
@@ -62,7 +57,7 @@ const FaucetModal: FunctionComponent<FaucetModalProps> = () => {
       </Modal>
     );
   }
-  return <button onClick={toggle}>Use Faucet</button>;
+  return <button onClick={faucetModal.toggle}>Use Faucet</button>;
 };
 
 export default FaucetModal;

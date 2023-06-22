@@ -1,0 +1,10 @@
+.button {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.25em 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-yellow);
+    color: var(--primary-blue);
+    margin: 0;
+}

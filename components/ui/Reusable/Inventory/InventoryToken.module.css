@@ -3,14 +3,18 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    border: 1px solid black;
     border-radius: 8px;
-    transition: all 0.5s ease;
+    border: none;
+    background-color: var(--accent-blue);
 }
 
 .selected {
-    border-color: 1px solid lightgreen;
-    transition: all 0.5s ease;
+    outline: 2px solid lightgreen;
+}
+
+.coin_container {
+    display: flex;
+    justify-content: center;
 }
 
 .image_container {
