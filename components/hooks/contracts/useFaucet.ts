@@ -7,15 +7,15 @@ const useFaucet = () => {
   const { provider } = useMetaMask();
   const [contract, setContract] = useState<MachoFaucetContract>();
   useEffect(() => {
-    if (provider) {
-      const getContract = async () => {
-        const contract = await loadContract("MachoFaucet", provider);
-        const signer = await provider.getSigner();
-        const signedContract = contract.connect(signer);
-        setContract(signedContract as unknown as MachoFaucetContract);
-      };
-      getContract();
-    }
+    // if (provider) {
+    //   const getContract = async () => {
+    //     const contract = await loadContract("MachoFaucet", provider);
+    //     const signer = await provider.getSigner();
+    //     const signedContract = contract.connect(signer);
+    //     setContract(signedContract as unknown as MachoFaucetContract);
+    //   };
+    //   getContract();
+    // }
   }, [provider]);
 
   return contract;

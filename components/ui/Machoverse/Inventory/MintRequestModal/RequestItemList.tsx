@@ -1,10 +1,11 @@
 import { FunctionComponent } from "react";
 import classes from "./RequestItemList.module.css";
-import { MachoToken } from "@_types/machoverse";
+import { UserToken } from "@_types/machoverse";
 import RequestItem from "./RequestItem";
+import useTokenMetadata from "@_hooks/machoverse/useTokenMetadata";
 
 interface RequestItemListProps {
-  tokens: MachoToken[];
+  tokens: UserToken[];
   updateTokenValue?: (id: number, value: number) => void;
   showNumberInput?: boolean;
 }
@@ -14,13 +15,16 @@ const RequestItemList: FunctionComponent<RequestItemListProps> = ({
   updateTokenValue,
   showNumberInput,
 }) => {
+  const { metadata } = useTokenMetadata();
+  if (!metadata) return <p>Loading...</p>;
   return (
     <ul>
       {tokens.map((token) => {
         return (
           <RequestItem
             showNumberInput={showNumberInput}
-            token={token}
+            userToken={token}
+            token={metadata[token.tokenId]}
             onValueChange={updateTokenValue}
             key={token.tokenId}
           />

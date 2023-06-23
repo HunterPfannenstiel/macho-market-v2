@@ -2,14 +2,17 @@ import { FunctionComponent } from "react";
 import classes from "./InventoryToken.module.css";
 import Token from "../Token";
 import Image from "next/image";
-import { MachoToken } from "@_types/machoverse";
+import { MachoToken, UserToken } from "@_types/machoverse";
 
-type InventoryTokenProps = { token: MachoToken } & {
+type InventoryTokenProps = {
+  userToken: UserToken;
+  token: MachoToken;
   isSelected: boolean;
   onClickHandler: (id: number) => void;
 };
 
 const InventoryToken: FunctionComponent<InventoryTokenProps> = ({
+  userToken,
   token,
   isSelected,
   onClickHandler,
@@ -21,7 +24,7 @@ const InventoryToken: FunctionComponent<InventoryTokenProps> = ({
     <div
       className={className}
       onClick={() => {
-        onClickHandler(token.tokenId);
+        onClickHandler(userToken.tokenId);
       }}
     >
       <div
@@ -47,7 +50,7 @@ const InventoryToken: FunctionComponent<InventoryTokenProps> = ({
       </div>
       <div className={classes.token_info}>
         <p>{token.name}</p>
-        <p>{token.amount}</p>
+        <p>{userToken.amount}</p>
       </div>
     </div>
   );

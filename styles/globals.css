@@ -8,6 +8,8 @@
   --accent-blue: #162236;
   --primary-yellow: #E9C33D;
   color: #FFFFFF;
+  --border-radius-sm: 8px;
+  --border-radius-lg: 12px;
 }
 
 html,
@@ -35,6 +37,21 @@ p {
 
 h1, h2, h3, h4, h5, p {
   margin: 0;
+}
+
+button {
+  cursor: pointer;
+  color: var(--primary-blue)
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+input {
+  border: none;
+  color: var(--primary-blue);
+  font-family: var(--primary-font);
 }
 
 .item_container {

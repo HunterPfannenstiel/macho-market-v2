@@ -2,21 +2,23 @@ import { FunctionComponent } from "react";
 import classes from "./RequestItem.module.css";
 import Image from "next/image";
 import NumberInput from "components/ui/Reusable/Form/Inputs/NumberInput";
-import { MachoToken } from "@_types/machoverse";
+import { MachoToken, UserToken } from "@_types/machoverse";
 
 interface RequestItemProps {
+  userToken: UserToken;
   token: MachoToken;
   onValueChange?: (id: number, value: number) => void;
   showNumberInput?: boolean;
 }
 
 const RequestItem: FunctionComponent<RequestItemProps> = ({
+  userToken,
   token,
   onValueChange,
   showNumberInput = true,
 }) => {
   const onChange = (value: number) => {
-    onValueChange && onValueChange(token.tokenId, value);
+    onValueChange && onValueChange(userToken.tokenId, value);
   };
   const classN =
     token.type === "coin"
@@ -34,12 +36,12 @@ const RequestItem: FunctionComponent<RequestItemProps> = ({
             <NumberInput
               onChange={onChange}
               className={classes.num_input}
-              max={token.amount}
+              max={userToken.amount}
             />
             <span>/</span>
           </>
         )}
-        <p>{token.amount}</p>
+        <p>{userToken.amount}</p>
       </div>
     </div>
   );

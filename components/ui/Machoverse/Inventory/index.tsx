@@ -1,13 +1,13 @@
 "use client";
 
 import { FunctionComponent } from "react";
-import { MachoToken } from "@_types/machoverse";
+import { UserToken } from "@_types/machoverse";
 
 import DatabaseInventory from "./DatabaseInventory";
 import useHandleTokens from "@_hooks/machoverse/useHandleTokens";
 
 interface InventoryProps {
-  tokens: MachoToken[];
+  tokens: UserToken[];
 }
 
 const Inventory: FunctionComponent<InventoryProps> = ({ tokens }) => {

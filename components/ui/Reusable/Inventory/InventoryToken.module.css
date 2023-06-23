@@ -3,9 +3,10 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    border-radius: 8px;
+    border-radius: var(--border-radius-sm);
     border: none;
     background-color: var(--accent-blue);
+    cursor: pointer;
 }
 
 .selected {

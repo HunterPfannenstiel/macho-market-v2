@@ -1,11 +1,12 @@
 import { FunctionComponent } from "react";
 import classes from "./InventoryTokenList.module.css";
-import { MachoToken } from "@_types/machoverse";
+import { MachoToken, UserToken } from "@_types/machoverse";
 import InventoryToken from "./InventoryToken";
 import { Selections } from "@_types/index";
+import useTokenMetadata from "@_hooks/machoverse/useTokenMetadata";
 
 interface InventoryTokenListProps {
-  tokens: MachoToken[];
+  tokens: UserToken[];
   onTokenClicked: (id: number) => void;
   selectedTokenIds?: Selections;
 }
@@ -15,6 +16,8 @@ const InventoryTokenList: FunctionComponent<InventoryTokenListProps> = ({
   onTokenClicked,
   selectedTokenIds,
 }) => {
+  const { metadata } = useTokenMetadata();
+  if (!metadata) return <p>Loading...</p>;
   return (
     <ul className={classes.tokens}>
       {tokens.map((token) => {
@@ -23,7 +26,8 @@ const InventoryTokenList: FunctionComponent<InventoryTokenListProps> = ({
         );
         return (
           <InventoryToken
-            token={token}
+            userToken={token}
+            token={metadata[token.tokenId]}
             isSelected={selected}
             onClickHandler={onTokenClicked}
           />

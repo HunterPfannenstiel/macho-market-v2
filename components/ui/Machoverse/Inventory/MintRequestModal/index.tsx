@@ -1,15 +1,16 @@
-import { FunctionComponent, useRef } from "react";
+import { FunctionComponent } from "react";
 import classes from "./index.module.css";
 import Modal from "components/ui/Reusable/Modal";
 import { ModalProps } from "@_types/index";
 import RequestItemList from "./RequestItemList";
-import { MachoToken, TransactionInfo, UserToken } from "@_types/machoverse";
+import { TransactionInfo, UserToken } from "@_types/machoverse";
 import Button from "components/ui/Reusable/Buttons/Button";
 import { BrowserProvider } from "ethers";
+import { createMintRequest } from "@_utils/web3/mint-request";
 
 interface MintRequestModalProps {
   modalProps: ModalProps;
-  selectedTokens: MachoToken[];
+  selectedTokens: UserToken[];
   onConfirmMint: (details: TransactionInfo) => void;
   provider: BrowserProvider | null;
   selectedTokenValues: { [id: number]: number };
@@ -25,28 +26,10 @@ const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
   updateSelectedTokenValue,
 }) => {
   const onCreateRequest = async () => {
-    if (!provider) {
-      console.log("Please connect wallet");
-      return;
-    }
-    const tokens: UserToken[] = Object.keys(selectedTokenValues).map((key) => {
+    const tokens = Object.keys(selectedTokenValues).map((key) => {
       return { tokenId: +key, amount: selectedTokenValues[+key] };
     });
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/mint`,
-      {
-        method: "POST",
-        body: JSON.stringify({ tokens }),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      }
-    );
-    const data = await res.json();
-    if (!res.ok) {
-      console.log("Error!", data);
-    } else {
-      onConfirmMint(data as TransactionInfo);
-    }
+    createMintRequest("Mint", provider, onConfirmMint, tokens);
   };
   return (
     <Modal modalProps={modalProps} className={classes.modal}>

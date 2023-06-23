@@ -1,8 +1,8 @@
 import { Selections } from "@_types/index";
-import { MachoToken } from "@_types/machoverse";
+import { UserToken } from "@_types/machoverse";
 import { useRef, useState } from "react";
 
-const useHandleTokens = (tokens: MachoToken[]) => {
+const useHandleTokens = (tokens: UserToken[]) => {
   const [currentTokens, setCurrentTokens] = useState(tokens);
   const [selectedTokens, setSelectedTokens] = useState<Selections>({});
   const selectedTokenValues = useRef<{ [id: number]: number }>({});
@@ -12,12 +12,10 @@ const useHandleTokens = (tokens: MachoToken[]) => {
       const newTokens = prevState.map((token) => {
         return { ...token };
       });
-      console.log("updating values", selectedTokenValues.current);
       for (let i = 0; i < newTokens.length; i++) {
         console.log(newTokens[i].tokenId);
         const updateAmount = selectedTokenValues.current[newTokens[i].tokenId];
         if (updateAmount) {
-          console.log("DING", updateAmount);
           newTokens[i].amount -= updateAmount;
         }
       }

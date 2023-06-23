@@ -1,4 +1,4 @@
-import { MachoToken } from "@_types/machoverse";
+import { UserToken } from "@_types/machoverse";
 import { cookies } from "next/headers";
 import Inventory from "components/ui/Machoverse/Inventory";
 
@@ -16,7 +16,7 @@ export default InventoryPage;
 
 const fetchInventory = async () => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/web/inventory`,
+    `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/user-tokens`,
     { headers: { Cookie: cookies().toString() }, cache: "no-store" }
   );
 
@@ -25,5 +25,5 @@ const fetchInventory = async () => {
     console.log("sign in error", data);
     return [];
   }
-  return data as MachoToken[];
+  return data as UserToken[];
 };

@@ -13,7 +13,12 @@ const TransactionItemList: FunctionComponent<TransactionItemListProps> = ({
   return (
     <ul className={classes.transaction_list}>
       {transactions.map((transaction) => {
-        return <TransactionItem transaction={transaction} />;
+        return (
+          <TransactionItem
+            key={transaction.transaction_id}
+            transaction={transaction}
+          />
+        );
       })}
     </ul>
   );

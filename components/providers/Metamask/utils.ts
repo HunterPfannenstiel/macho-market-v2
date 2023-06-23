@@ -42,6 +42,7 @@ export const initializeMetaMaskState = (): MetaMaskDetails => {
     return { provider: null, isLoading: false, isInstalled: false };
   } else {
     const provider = new ethers.BrowserProvider(window.ethereum);
+    // const provider = null;
     return { provider, isLoading: false, isInstalled: true };
     // const signer = await provider.getSigner(); //requests access to write operations (which are performed with the user's private key)
   }

@@ -1,6 +1,6 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 import classes from "./index.module.css";
-import { MachoToken, TransactionInfo } from "@_types/machoverse";
+import { TransactionInfo, UserToken } from "@_types/machoverse";
 import InventoryTokenList from "components/ui/Reusable/Inventory/InventoryTokenList";
 import useAnimateModal from "@_hooks/animation/useAnimateModal";
 import Button from "components/ui/Reusable/Buttons/Button";
@@ -8,12 +8,13 @@ import MintRequestModal from "../MintRequestModal";
 import { loadMachoverse } from "@_utils/web3/contract";
 import { useMetaMask } from "@_providers/Metamask";
 import { Selections } from "@_types/index";
+import { mintTransactionToBlockchain } from "@_utils/web3/mint-request";
 
 interface DatabaseInventoryProps {
-  tokens: MachoToken[];
+  tokens: UserToken[];
   onTokenClicked: (id: number) => void;
   selectedTokens: Selections;
-  getSelectedTokenData: () => MachoToken[];
+  getSelectedTokenData: () => UserToken[];
   decrementTokenAmounts: () => void;
   selectedTokenValues: { [id: number]: number };
   updateSelectedTokenValue: (id: number, amount: number) => void;
@@ -31,17 +32,10 @@ const DatabaseInventory: FunctionComponent<DatabaseInventoryProps> = ({
   const { provider } = useMetaMask();
   const mintRequestModal = useAnimateModal();
 
-  const onConfirmMint = async ({ data, signature }: TransactionInfo) => {
+  const onConfirmMint = async (data: TransactionInfo) => {
+    mintTransactionToBlockchain(data, provider!);
     mintRequestModal.toggle();
     decrementTokenAmounts();
-    console.log("Loading contract");
-    try {
-      const contract = await loadMachoverse(provider!);
-      const tx = await contract.mintTokens(data, signature);
-    } catch (error: any) {
-      console.log("ERROR", error.message);
-    }
-    console.log("contract loaded");
   };
   return (
     <>

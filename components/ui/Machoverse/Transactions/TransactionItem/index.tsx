@@ -1,11 +1,16 @@
 import { FunctionComponent, useRef } from "react";
 import classes from "./index.module.css";
-import { MachoToken, Transaction } from "@_types/machoverse";
+import { Transaction, UserToken } from "@_types/machoverse";
 import Button from "../../../Reusable/Buttons/Button";
 import useAnimateModal from "@_hooks/animation/useAnimateModal";
-import MintRequestModal from "../../Inventory/MintRequestModal";
 import Modal from "components/ui/Reusable/Modal";
 import RequestItemList from "../../Inventory/MintRequestModal/RequestItemList";
+import {
+  createMintRequest,
+  mintTransactionToBlockchain,
+} from "@_utils/web3/mint-request";
+import { BrowserProvider } from "ethers";
+import { useMetaMask } from "@_providers/Metamask";
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -14,8 +19,9 @@ interface TransactionItemProps {
 const TransactionItem: FunctionComponent<TransactionItemProps> = ({
   transaction,
 }) => {
+  const { provider } = useMetaMask();
   const tokenModal = useAnimateModal();
-  const tokens = useRef<MachoToken[]>([]);
+  const tokens = useRef<UserToken[]>([]);
   let txState = "";
   let className = "";
   let buttonText = "";
@@ -33,6 +39,10 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
     className = classes.reclaimed;
   }
   className += " " + classes.container;
+  let amount = 0;
+  transaction.tokens.forEach((token) => {
+    amount += token.amount;
+  });
   return (
     <>
       <div className={className + " " + "item_container"}>
@@ -42,7 +52,7 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
             <span>{new Date(transaction.created_on).toLocaleString()}</span>
           </p>
           <p>
-            Total token count: <span>{100}</span>
+            Total token count: <span>{amount}</span>
           </p>
         </div>
         <div className={classes.transaction_buttons}>
@@ -54,7 +64,18 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
           >
             View Tokens
           </Button>
-          {buttonText && <Button>{buttonText}</Button>}
+          {buttonText && (
+            <Button
+              onClick={buttonAction.bind(
+                null,
+                buttonText,
+                provider,
+                transaction.transaction_id
+              )}
+            >
+              {buttonText}
+            </Button>
+          )}
         </div>
       </div>
       {tokenModal.showModal && (
@@ -64,6 +85,24 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
       )}
     </>
   );
+};
+
+const buttonAction = async (
+  action: string,
+  proivder: BrowserProvider | null,
+  transactionId: number
+) => {
+  if (action === "Mint") {
+    createMintRequest(
+      "Remint",
+      proivder,
+      (data) => {
+        mintTransactionToBlockchain(data, proivder!);
+      },
+      undefined,
+      transactionId
+    );
+  }
 };
 
 export default TransactionItem;

@@ -1,0 +1,10 @@
+.login {
+    width: 90%;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.login_section {
+    border: 1px solid var(--accent-blue);
+    border-radius: var(--border-radius-sm);
+}

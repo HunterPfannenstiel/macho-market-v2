@@ -3,7 +3,7 @@
     min-height: 90%;
     background-color: var(--accent-blue);
     text-align: center;
-    border-radius: 10px;
+    border-radius: var(--border-radius-lg);
 }
 
 .item_list {

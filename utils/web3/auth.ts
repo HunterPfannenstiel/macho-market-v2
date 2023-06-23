@@ -30,7 +30,6 @@ export const authenticateWallet = async (url: string) => {
     return;
   }
 
-  console.log(info);
   const res = await fetch(url, {
     method: "POST",
     body: formatVerificationBody(info.signedData as string, info.account),

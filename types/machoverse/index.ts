@@ -3,23 +3,14 @@ export type UserToken = {
   amount: number;
 };
 
-export type MachoToken =
-  | {
-      tokenId: number;
-      name: string;
-      amount: number;
-      image: string;
-      type: "item";
-      colors: null;
-    }
-  | {
-      tokenId: number;
-      name: string;
-      amount: number;
-      image: string;
-      type: "coin";
-      colors: TokenColor;
-    };
+export type MachoToken = {
+  name: string;
+  image: string;
+  type: "coin" | "item";
+  colors: TokenColor;
+};
+
+export type MachoTokens = { [tokenId: number]: MachoToken };
 
 type TokenColor = {
   borderColor: string;
@@ -33,7 +24,7 @@ export type TransactionInfo = {
 
 export type Transaction = {
   created_on: string;
-  tokens: MachoToken[];
+  tokens: UserToken[];
   pending: boolean;
   confirmed: boolean;
   completed_on: string | null;
