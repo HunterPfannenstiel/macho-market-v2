@@ -12,25 +12,28 @@ const useScrollFetch = <T extends Array<any>, U extends Array<any>>(
   percentTillFetch = 50
 ) => {
   const page = useRef(initialPageNumber);
-  const date = useRef(new Date().toISOString());
+  const date = useRef(new Date().toUTCString());
   const endOfContent = useRef(false);
   const fetching = useRef(isInitialFetcher);
   const scrollHandler = useRef<any>(null);
   const scrollElement = useRef<HTMLElement>();
-  const queryFn = (date: string) => async () => {
+  const queryFn = async () => {
     fetching.current = true;
-    const res = await fetchFunction(page.current, date, fetchDependency);
-    console.log({ page: page.current, res });
+    const res = await fetchFunction(
+      { date: date.current, page: page.current, pageSize },
+      fetchDependency
+    );
     if (res.length < pageSize) endOfContent.current = true;
     else page.current++;
     fetching.current = false;
     return res;
   };
   const { data, fetchNextPage, isFetching, isFetchingNextPage, status } =
-    useInfiniteQuery({
+    useInfiniteQuery<U>({
       queryKey: [key, fetchDependency],
-      queryFn: queryFn(date.current),
+      queryFn: queryFn,
       getNextPageParam: () => page.current,
+      refetchOnWindowFocus: false,
     });
 
   const setScrollEvent = (elem: HTMLElement | null) => {
@@ -57,6 +60,9 @@ const useScrollFetch = <T extends Array<any>, U extends Array<any>>(
   useEffect(() => {
     endOfContent.current = false;
     page.current = 0;
+    date.current = new Date().toUTCString();
+
+    fetchNextPage();
   }, [...fetchDependency]);
 
   return { data, loading: isFetching, setScrollEvent, status };

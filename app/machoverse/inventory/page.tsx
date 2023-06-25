@@ -1,6 +1,7 @@
 import { UserToken } from "@_types/machoverse";
 import { cookies } from "next/headers";
 import Inventory from "components/ui/Machoverse/Inventory";
+import Web3API from "custom-objects/Web3API";
 
 const InventoryPage = async () => {
   const tokens = await fetchInventory();
@@ -15,15 +16,13 @@ const InventoryPage = async () => {
 export default InventoryPage;
 
 const fetchInventory = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/user-tokens`,
-    { headers: { Cookie: cookies().toString() }, cache: "no-store" }
+  const res = await Web3API.Get<UserToken[]>(
+    "/database/user-tokens",
+    cookies().toString()
   );
-
-  const data = await res.json();
-  if (!res.ok) {
-    console.log("sign in error", data);
+  if (res.success) return res.data;
+  else {
+    console.error(res.errorMessage);
     return [];
   }
-  return data as UserToken[];
 };

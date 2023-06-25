@@ -22,30 +22,20 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
   const { provider } = useMetaMask();
   const tokenModal = useAnimateModal();
   const tokens = useRef<UserToken[]>([]);
-  let txState = "";
-  let className = "";
-  let buttonText = "";
-  if (transaction.confirmed) {
-    txState = "confirmed";
-    className = classes.confirmed;
-  } else if (transaction.pending) {
-    //compare createdOn and currentTime
-    //buttonText = "Reclaim"
-    txState = "pending";
-    className = classes.pending;
-    buttonText = "Mint";
-  } else {
-    txState = "reclaimed";
-    className = classes.reclaimed;
-  }
-  className += " " + classes.container;
+  const txState = getTransactionState(
+    transaction.created_on,
+    transaction.completed_on,
+    transaction.confirmed
+  );
   let amount = 0;
   transaction.tokens.forEach((token) => {
     amount += token.amount;
   });
   return (
     <>
-      <div className={className + " " + "item_container"}>
+      <div
+        className={`${classes.container} ${txState.className} item_container`}
+      >
         <div className={classes.transaction_info}>
           <p>
             Created On:{" "}
@@ -64,16 +54,16 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
           >
             View Tokens
           </Button>
-          {buttonText && (
+          {txState.buttonText && (
             <Button
               onClick={buttonAction.bind(
                 null,
-                buttonText,
+                txState.status,
                 provider,
                 transaction.transaction_id
               )}
             >
-              {buttonText}
+              {txState.buttonText}
             </Button>
           )}
         </div>
@@ -87,12 +77,30 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
   );
 };
 
+const getTransactionState = (
+  created_on: string,
+  completed_on: string | null,
+  confirmed: boolean
+) => {
+  if (completed_on)
+    return {
+      status: "Complete",
+      buttonText: undefined,
+      className: confirmed ? classes.confirmed : classes.reclaimed,
+    };
+  const expireTime = new Date(created_on).getTime() + 5 * 60000; //add 5 minutes to created time;
+  const currentTime = new Date().getTime();
+  return currentTime < expireTime
+    ? { status: "Pending", buttonText: "Remint", className: classes.pending }
+    : { status: "Expired", buttonText: "Reclaim", className: classes.reclaim };
+};
+
 const buttonAction = async (
-  action: string,
+  status: string,
   proivder: BrowserProvider | null,
   transactionId: number
 ) => {
-  if (action === "Mint") {
+  if (status === "Pending") {
     createMintRequest(
       "Remint",
       proivder,

@@ -29,4 +29,5 @@ export default PageHeading;
 
 const pages: { [p: string]: ReactNode } = {
   inventory: "Inventory",
+  transactions: "Transactions",
 };

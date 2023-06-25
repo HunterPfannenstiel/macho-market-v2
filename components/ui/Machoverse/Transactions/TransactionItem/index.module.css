@@ -6,6 +6,18 @@
     background-color: var(--accent-blue);
 }
 
+.confirmed {
+    outline: 2px solid green;
+}
+
+.reclaimed {
+    outline: 2px solid aqua;
+}
+
+.reclaim {
+    outline: 2px solid orange;
+}
+
 .pending {
     outline: 2px solid yellow;
 }

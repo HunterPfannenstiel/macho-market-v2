@@ -5,6 +5,7 @@ import classes from "./Transactions.module.css";
 import TransactionItemList from "./TransactionItem/TransactionItemList";
 import useAnimateModal from "@_hooks/animation/useAnimateModal";
 import { Transaction } from "@_types/machoverse";
+import Link from "next/link";
 
 interface TransactionsProps {
   transactions: Transaction[];
@@ -13,7 +14,12 @@ interface TransactionsProps {
 const Transactions: FunctionComponent<TransactionsProps> = ({
   transactions,
 }) => {
-  return <TransactionItemList transactions={transactions} />;
+  return (
+    <>
+      <Link href={{ query: "filterPending=true" }}>Filter Pending</Link>
+      <TransactionItemList transactions={transactions} />
+    </>
+  );
 };
 
 export default Transactions;

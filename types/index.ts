@@ -8,3 +8,9 @@ export type ModalProps = {
 export type Selections = {
   [id: number]: boolean;
 };
+
+export type PageFetch = {
+  date: string | Date;
+  page: number;
+  pageSize: number;
+};

@@ -1,3 +1,5 @@
+import { PageFetch } from ".";
+
 export type CollectionListing = {
   token_id: number;
   amount: number;
@@ -51,7 +53,6 @@ export type LogEntry = {
 };
 
 export type PageFetcher<T, U> = (
-  page: number,
-  date: string,
+  pageInfo: PageFetch,
   dependency?: T
 ) => Promise<U>;
