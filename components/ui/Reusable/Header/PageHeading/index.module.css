@@ -1,0 +1,29 @@
+.page_heading {
+    background: linear-gradient(180deg, rgba(16, 21, 29, 0.63) 0%, rgba(29, 27, 16, 0.44) 100%);
+    font-weight: 900;
+    max-height: 100px;
+    height: 10vh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: 0.5rem;
+    padding-left: 1rem;
+    border-bottom: 2px solid var(--accent-blue);
+}
+
+.title {
+    font-size: 2rem;
+    color: var(--primary-yellow);
+}
+
+@media (min-width: 40em) {
+    .page_heading {
+        max-height: 172px;
+        height: 12vh;
+        padding-block: 1rem;
+    }
+
+    .title {
+        font-size: 3rem;
+        letter-spacing: 4.08px;
+    }
+}

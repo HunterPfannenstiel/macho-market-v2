@@ -31,6 +31,8 @@
       "@_utils/*": [
         "utils/*"
       ],
+      "@_reuseable/*" :["components/ui/Reusable/*"],
+      "_@ui/*": ["components/ui/*"]
     },
     "baseUrl": ".",
     "plugins": [

@@ -3,36 +3,21 @@ import classes from "./index.module.css";
 import TextInput from "components/ui/Reusable/Form/TextInput";
 import FormLayout from "components/ui/Reusable/Form/FormLayout";
 
-interface LoginFormProps {}
+interface LoginFormProps {
+  onLogin: (userName: string, password: string) => void;
+}
 
-const LoginForm: FunctionComponent<LoginFormProps> = () => {
+const LoginForm: FunctionComponent<LoginFormProps> = ({ onLogin }) => {
   const userName = useRef("");
   const password = useRef("");
-
-  const onLogin = async (e: FormEvent) => {
-    e.preventDefault();
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/login`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          userName: userName.current,
-          password: password.current,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (!res.ok) {
-      console.error("Error logging in!");
-      return;
-    } else {
-      console.log("Success! Redirect");
-    }
-  };
   return (
-    <FormLayout onSubmit={onLogin} buttonText="Log In">
+    <FormLayout
+      onSubmit={(e) => {
+        e.preventDefault();
+        onLogin(userName.current, password.current);
+      }}
+      buttonText="Log In"
+    >
       <TextInput
         label="User Name"
         onInputChange={(name) => {
@@ -44,6 +29,7 @@ const LoginForm: FunctionComponent<LoginFormProps> = () => {
         onInputChange={(pw) => {
           password.current = pw;
         }}
+        type="password"
       />
     </FormLayout>
   );

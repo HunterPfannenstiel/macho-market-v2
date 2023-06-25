@@ -3,31 +3,32 @@ import classes from "./index.module.css";
 import TextInput from "components/ui/Reusable/Form/TextInput";
 import FormLayout from "components/ui/Reusable/Form/FormLayout";
 
-interface CreateAccountFormProps {}
+interface CreateAccountFormProps {
+  onCreateAccount: (
+    userName: string,
+    password: string,
+    confirmPassword: string
+  ) => void;
+}
 
-const CreateAccountForm: FunctionComponent<CreateAccountFormProps> = () => {
+const CreateAccountForm: FunctionComponent<CreateAccountFormProps> = ({
+  onCreateAccount,
+}) => {
   const userName = useRef("");
   const password = useRef("");
-  const retypePw = useRef("");
-
-  const onCreateAccount = async (e: FormEvent) => {
-    e.preventDefault();
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/create-account`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          userName: userName.current,
-          password: password.current,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  };
+  const confirmPassword = useRef("");
   return (
-    <FormLayout onSubmit={onCreateAccount} buttonText="Create Account">
+    <FormLayout
+      onSubmit={(e) => {
+        e.preventDefault();
+        onCreateAccount(
+          userName.current,
+          password.current,
+          confirmPassword.current
+        );
+      }}
+      buttonText="Create Account"
+    >
       <TextInput
         label="User Name"
         onInputChange={(name) => {
@@ -46,7 +47,7 @@ const CreateAccountForm: FunctionComponent<CreateAccountFormProps> = () => {
       <TextInput
         label="Retype Password"
         onInputChange={(pw) => {
-          retypePw.current = pw;
+          confirmPassword.current = pw;
         }}
         id={"retype"}
         type="password"

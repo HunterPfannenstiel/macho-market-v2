@@ -1,17 +1,22 @@
 "use client";
 
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { UserToken } from "@_types/machoverse";
 
 import DatabaseInventory from "./DatabaseInventory";
 import useHandleTokens from "@_hooks/machoverse/useHandleTokens";
+import { useMachoAccount } from "@_providers/Machoverse/Account";
 
 interface InventoryProps {
   tokens: UserToken[];
 }
 
 const Inventory: FunctionComponent<InventoryProps> = ({ tokens }) => {
-  const dbTokens = useHandleTokens(tokens);
+  const dbTokens = useHandleTokens();
+  const { userName } = useMachoAccount();
+  useEffect(() => {
+    dbTokens.initializeTokens(tokens);
+  }, [tokens]);
   return (
     <DatabaseInventory
       tokens={dbTokens.currentTokens}

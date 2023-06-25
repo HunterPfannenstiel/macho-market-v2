@@ -1,0 +1,38 @@
+.header {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    padding-inline: 1rem;
+}
+
+.links {
+    display: none;
+}
+
+.header *:last-child {
+    margin-left: auto;
+}
+
+@media (min-width: 40em) {
+    .nav {
+        width: 33%;
+    }
+    
+    .header a {
+        width: 33%;
+    }
+
+    .links {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+    
+    .links > li:first-child {
+        margin-left: auto;
+    }
+    
+    .links > li:last-child {
+        margin-right: auto;
+    }
+}

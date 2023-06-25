@@ -2,8 +2,8 @@ import { Selections } from "@_types/index";
 import { UserToken } from "@_types/machoverse";
 import { useRef, useState } from "react";
 
-const useHandleTokens = (tokens: UserToken[]) => {
-  const [currentTokens, setCurrentTokens] = useState(tokens);
+const useHandleTokens = () => {
+  const [currentTokens, setCurrentTokens] = useState<UserToken[]>([]);
   const [selectedTokens, setSelectedTokens] = useState<Selections>({});
   const selectedTokenValues = useRef<{ [id: number]: number }>({});
 
@@ -13,7 +13,6 @@ const useHandleTokens = (tokens: UserToken[]) => {
         return { ...token };
       });
       for (let i = 0; i < newTokens.length; i++) {
-        console.log(newTokens[i].tokenId);
         const updateAmount = selectedTokenValues.current[newTokens[i].tokenId];
         if (updateAmount) {
           newTokens[i].amount -= updateAmount;
@@ -26,7 +25,6 @@ const useHandleTokens = (tokens: UserToken[]) => {
 
   const updateSelectedTokenValue = (id: number, value: number) => {
     selectedTokenValues.current[id] = value;
-    console.log(selectedTokenValues.current);
   };
 
   const updateSelectedToken = (id: number) => {
@@ -50,6 +48,7 @@ const useHandleTokens = (tokens: UserToken[]) => {
     updateSelectedTokenValue,
     getSelectedTokenData,
     updateSelectedToken,
+    initializeTokens: setCurrentTokens,
   };
 };
 

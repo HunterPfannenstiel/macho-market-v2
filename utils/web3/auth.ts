@@ -39,6 +39,7 @@ export const authenticateWallet = async (url: string) => {
   const data = await res.json();
   if (!res.ok) {
     console.log("Error", data);
+    return;
   } else {
     return data;
   }

@@ -30,3 +30,10 @@ export type Transaction = {
   completed_on: string | null;
   transaction_id: number;
 };
+
+export type SessionDetails = {
+  isSignedIn?: boolean;
+  userName?: string;
+  sessionExpiry?: Date;
+  address?: string;
+};

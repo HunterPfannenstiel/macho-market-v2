@@ -1,0 +1,16 @@
+.account {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--navy);
+    padding: 0.5rem;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+}
+
+.color {
+    width: 23px;
+    height: 23px;
+    background-color: #DC47A9;
+    border-radius: 50%;
+}
