@@ -1,5 +1,5 @@
 import { PageFetcher } from "@_types/marketplace";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { MutableRefObject, useEffect, useRef } from "react";
 
 const useScrollFetch = <T extends Array<any>, U extends Array<any>>(
@@ -17,24 +17,31 @@ const useScrollFetch = <T extends Array<any>, U extends Array<any>>(
   const fetching = useRef(isInitialFetcher);
   const scrollHandler = useRef<any>(null);
   const scrollElement = useRef<HTMLElement>();
-  const queryFn = async () => {
+  const queryKey = [key, fetchDependency];
+  const queryClient = useQueryClient();
+  const queryFn = async (pageNumber: number) => {
+    console.log("CALL", pageNumber);
     fetching.current = true;
     const res = await fetchFunction(
-      { date: date.current, page: page.current, pageSize },
+      { date: date.current, page: pageNumber, pageSize },
       fetchDependency
     );
     if (res.length < pageSize) endOfContent.current = true;
-    else page.current++;
+    else page.current = pageNumber + 1;
     fetching.current = false;
+    console.log(`RES ${pageNumber}`, res);
     return res;
   };
-  const { data, fetchNextPage, isFetching, isFetchingNextPage, status } =
-    useInfiniteQuery<U>({
-      queryKey: [key, fetchDependency],
-      queryFn: queryFn,
-      getNextPageParam: () => page.current,
-      refetchOnWindowFocus: false,
-    });
+  const { data, fetchNextPage, isFetching, status } = useInfiniteQuery<U>({
+    queryKey,
+    queryFn: ({ pageParam }) => queryFn(pageParam),
+    getNextPageParam: () => {
+      console.log("NEXT PAGE PARAM");
+      return endOfContent.current ? undefined : page.current;
+    },
+    enabled: page.current !== undefined,
+    refetchOnWindowFocus: false,
+  });
 
   const setScrollEvent = (elem: HTMLElement | null) => {
     if (elem) {
@@ -58,6 +65,7 @@ const useScrollFetch = <T extends Array<any>, U extends Array<any>>(
   };
 
   useEffect(() => {
+    queryClient.invalidateQueries(queryKey);
     endOfContent.current = false;
     page.current = 0;
     date.current = new Date().toUTCString();

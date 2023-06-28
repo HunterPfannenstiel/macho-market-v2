@@ -1,25 +1,22 @@
 import { Selections } from "@_types/index";
 import { UserToken } from "@_types/machoverse";
 import { useRef, useState } from "react";
+import useUpdateTokens, { SuccessDelegate } from "./inventory/useUpdateTokens";
 
-const useHandleTokens = () => {
-  const [currentTokens, setCurrentTokens] = useState<UserToken[]>([]);
+const useHandleTokens = (
+  dbToBlockDelegate: SuccessDelegate,
+  blockToDBDelegate: () => void
+) => {
+  const { tokens, removeFromTokenState, tokenLocation } = useUpdateTokens(
+    dbToBlockDelegate,
+    blockToDBDelegate
+  );
   const [selectedTokens, setSelectedTokens] = useState<Selections>({});
   const selectedTokenValues = useRef<{ [id: number]: number }>({});
 
-  const updateTokenValues = () => {
-    setCurrentTokens((prevState) => {
-      const newTokens = prevState.map((token) => {
-        return { ...token };
-      });
-      for (let i = 0; i < newTokens.length; i++) {
-        const updateAmount = selectedTokenValues.current[newTokens[i].tokenId];
-        if (updateAmount) {
-          newTokens[i].amount -= updateAmount;
-        }
-      }
-      return newTokens;
-    });
+  const updateTokenValues = (updateTokens: UserToken[]) => {
+    removeFromTokenState(updateTokens);
+    selectedTokenValues.current = {};
     setSelectedTokens({});
   };
 
@@ -37,18 +34,22 @@ const useHandleTokens = () => {
   };
 
   const getSelectedTokenData = () => {
-    return currentTokens.filter((token) => selectedTokens[token.tokenId]);
+    if (!tokens) {
+      console.log("Tokens undefined");
+      return [];
+    }
+    return tokens.filter((token) => selectedTokens[token.tokenId]);
   };
 
   return {
-    currentTokens,
+    currentTokens: tokens || [],
     selectedTokens,
     selectedTokenValues: selectedTokenValues.current,
     updateTokenValues,
     updateSelectedTokenValue,
     getSelectedTokenData,
     updateSelectedToken,
-    initializeTokens: setCurrentTokens,
+    tokenLocation,
   };
 };
 

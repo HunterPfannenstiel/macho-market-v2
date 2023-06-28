@@ -1,33 +1,57 @@
 "use client";
 
-import { FunctionComponent, useEffect } from "react";
-import { UserToken } from "@_types/machoverse";
-
-import DatabaseInventory from "./DatabaseInventory";
+import { FunctionComponent } from "react";
+import { TransactionInfo, UserToken } from "@_types/machoverse";
 import useHandleTokens from "@_hooks/machoverse/useHandleTokens";
-import { useMachoAccount } from "@_providers/Machoverse/Account";
+import Button from "@_reuseable/Buttons/Button";
+import useAnimateModal from "@_hooks/animation/useAnimateModal";
+import Inventory from "@_reuseable/Machoverse/Inventory";
+import { mintTransactionToBlockchain } from "@_utils/web3/mint-request";
+import { useMetaMask } from "@_providers/Metamask";
+import Link from "next/link";
 
 interface InventoryProps {
-  tokens: UserToken[];
+  // tokens: UserToken[];
 }
 
-const Inventory: FunctionComponent<InventoryProps> = ({ tokens }) => {
-  const dbTokens = useHandleTokens();
-  const { userName } = useMachoAccount();
-  useEffect(() => {
-    dbTokens.initializeTokens(tokens);
-  }, [tokens]);
+const MachoInventory: FunctionComponent<InventoryProps> = ({}) => {
+  const onConfirmMint = async (data?: TransactionInfo) => {
+    if (data) {
+      mintTransactionToBlockchain(data, provider!);
+      mintRequestModal.toggle();
+    }
+  };
+  const mintRequestModal = useAnimateModal();
+  const tokens = useHandleTokens(onConfirmMint, mintRequestModal.toggle);
+  const { provider } = useMetaMask();
+
+  const createDBRequest = async (updateTokens: UserToken[]) => {
+    tokens.updateTokenValues(updateTokens);
+  };
   return (
-    <DatabaseInventory
-      tokens={dbTokens.currentTokens}
-      onTokenClicked={dbTokens.updateSelectedToken}
-      selectedTokens={dbTokens.selectedTokens}
-      getSelectedTokenData={dbTokens.getSelectedTokenData}
-      decrementTokenAmounts={dbTokens.updateTokenValues}
-      updateSelectedTokenValue={dbTokens.updateSelectedTokenValue}
-      selectedTokenValues={dbTokens.selectedTokenValues}
-    />
+    <>
+      <div>
+        <Link href={{ query: "inventory=game" }}>In game tokens</Link>
+        <Link href={{ query: "inventory=blockchain" }}>Blockchain tokens</Link>
+      </div>
+      <Button
+        onClick={mintRequestModal.toggle}
+        disabled={Object.keys(tokens.selectedTokens).length === 0}
+      >
+        Create Mint Request
+      </Button>
+      <Inventory
+        tokens={tokens.currentTokens}
+        onTokenClicked={tokens.updateSelectedToken}
+        selectedTokens={tokens.selectedTokens}
+        getSelectedTokenData={tokens.getSelectedTokenData}
+        updateSelectedTokenValue={tokens.updateSelectedTokenValue}
+        selectedTokenValues={tokens.selectedTokenValues}
+        onConfirmTransaction={createDBRequest}
+        modalProps={mintRequestModal}
+      />
+    </>
   );
 };
 
-export default Inventory;
+export default MachoInventory;

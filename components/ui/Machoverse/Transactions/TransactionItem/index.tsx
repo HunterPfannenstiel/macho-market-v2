@@ -56,12 +56,12 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
           </Button>
           {txState.buttonText && (
             <Button
-              onClick={buttonAction.bind(
-                null,
-                txState.status,
-                provider,
-                transaction.transaction_id
-              )}
+            // onClick={buttonAction.bind(
+            //   null,
+            //   txState.status,
+            //   provider,
+            //   transaction.transaction_id
+            // )}
             >
               {txState.buttonText}
             </Button>
@@ -95,22 +95,22 @@ const getTransactionState = (
     : { status: "Expired", buttonText: "Reclaim", className: classes.reclaim };
 };
 
-const buttonAction = async (
-  status: string,
-  proivder: BrowserProvider | null,
-  transactionId: number
-) => {
-  if (status === "Pending") {
-    createMintRequest(
-      "Remint",
-      proivder,
-      (data) => {
-        mintTransactionToBlockchain(data, proivder!);
-      },
-      undefined,
-      transactionId
-    );
-  }
-};
+// const buttonAction = async (
+//   status: string,
+//   proivder: BrowserProvider | null,
+//   transactionId: number
+// ) => {
+//   if (status === "Pending") {
+//     createMintRequest(
+//       "Remint",
+//       proivder,
+//       (data) => {
+//         mintTransactionToBlockchain(data, proivder!);
+//       },
+//       undefined,
+//       transactionId
+//     );
+//   }
+// };
 
 export default TransactionItem;

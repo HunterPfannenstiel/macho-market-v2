@@ -1,54 +1,41 @@
 import { TransactionInfo, UserToken } from "@_types/machoverse";
 import { BrowserProvider } from "ethers";
 import { loadMachoverse } from "./contract";
+import Web3API from "custom-objects/Fetch/API";
 
 export const createMintRequest = async (
   action: "Mint" | "Remint",
-  provider: BrowserProvider | null,
-  mintHandler: (data: TransactionInfo) => void,
   tokens?: UserToken[],
   transactionId?: number
 ) => {
-  if (!provider) {
-    console.log("Please connect wallet");
-    return;
-  }
   if (action === "Mint") {
     if (!tokens) {
       console.error("No tokens were provided");
       return;
     }
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/mint`,
-      {
-        method: "POST",
-        body: JSON.stringify({ tokens }),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      }
+    const { data, success, errorMessage } = await Web3API.Post(
+      "/database/mint",
+      JSON.stringify({ tokens })
     );
-    const data = await res.json();
-    if (!res.ok) {
-      console.log("Error!", data);
+
+    if (!success) {
+      throw new Error(errorMessage);
     } else {
-      mintHandler(data as TransactionInfo);
+      return data as TransactionInfo;
     }
   } else {
     if (!transactionId) {
       console.error("No transaction id was provided");
       return;
     }
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/transaction-info?transactionId=${transactionId}`,
-      {
-        credentials: "include",
-      }
+    const { data, success, errorMessage } = await Web3API.Get(
+      `/database/transaction-info?transactionId=${transactionId}`
     );
-    const data = await res.json();
-    if (!res.ok) {
-      console.log("Error!", data);
+
+    if (!success) {
+      throw new Error(errorMessage);
     } else {
-      mintHandler(data as TransactionInfo);
+      return data as TransactionInfo;
     }
   }
 };

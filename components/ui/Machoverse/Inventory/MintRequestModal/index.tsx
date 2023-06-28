@@ -11,8 +11,7 @@ import { createMintRequest } from "@_utils/web3/mint-request";
 interface MintRequestModalProps {
   modalProps: ModalProps;
   selectedTokens: UserToken[];
-  onConfirmMint: (details: TransactionInfo) => void;
-  provider: BrowserProvider | null;
+  onConfirmTransaction: () => void;
   selectedTokenValues: { [id: number]: number };
   updateSelectedTokenValue: (id: number, amount: number) => void;
 }
@@ -20,17 +19,9 @@ interface MintRequestModalProps {
 const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
   modalProps,
   selectedTokens,
-  onConfirmMint,
-  provider,
-  selectedTokenValues,
+  onConfirmTransaction,
   updateSelectedTokenValue,
 }) => {
-  const onCreateRequest = async () => {
-    const tokens = Object.keys(selectedTokenValues).map((key) => {
-      return { tokenId: +key, amount: selectedTokenValues[+key] };
-    });
-    createMintRequest("Mint", provider, onConfirmMint, tokens);
-  };
   return (
     <Modal modalProps={modalProps} className={classes.modal}>
       <div className={classes.item_list}>
@@ -39,7 +30,7 @@ const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
           updateTokenValue={updateSelectedTokenValue}
         />
       </div>
-      <Button onClick={onCreateRequest} className={classes.create_button}>
+      <Button onClick={onConfirmTransaction} className={classes.create_button}>
         Create Request
       </Button>
     </Modal>
