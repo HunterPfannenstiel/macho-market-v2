@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useRef } from "react";
 import classes from "./index.module.css";
 import Modal from "components/ui/Reusable/Modal";
 import { ModalProps } from "@_types/index";
@@ -13,15 +13,21 @@ interface MintRequestModalProps {
   selectedTokens: UserToken[];
   onConfirmTransaction: () => void;
   selectedTokenValues: { [id: number]: number };
-  updateSelectedTokenValue: (id: number, amount: number) => void;
 }
 
 const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
   modalProps,
   selectedTokens,
   onConfirmTransaction,
-  updateSelectedTokenValue,
 }) => {
+  const selectedTokenValues = useRef<{ [id: number]: number }>({});
+  const updateSelectedTokenValue = (id: number, value: number) => {
+    selectedTokenValues.current[id] = value;
+  };
+  const onClick = () => {
+    onConfirmTransaction;
+    selectedTokenValues.current = {};
+  };
   return (
     <Modal modalProps={modalProps} className={classes.modal}>
       <div className={classes.item_list}>
@@ -30,7 +36,7 @@ const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
           updateTokenValue={updateSelectedTokenValue}
         />
       </div>
-      <Button onClick={onConfirmTransaction} className={classes.create_button}>
+      <Button onClick={onClick} className={classes.create_button}>
         Create Request
       </Button>
     </Modal>

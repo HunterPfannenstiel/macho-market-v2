@@ -3,30 +3,33 @@ import { useMachoAccount } from "@_providers/Machoverse/Account";
 import { Transaction } from "@_types/machoverse";
 import { PageFetcher } from "@_types/marketplace";
 import Web3API from "custom-objects/Fetch/API";
-import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const useTransactions = () => {
   const { userName } = useMachoAccount();
   const params = useSearchParams();
-  const { data, setScrollEvent, loading } = useScrollFetch<
-    [ReadonlyURLSearchParams | null],
+  const { data, setScrollEvent, loading, queryKey } = useScrollFetch<
+    (string | null | undefined)[],
     Transaction[]
-  >(transactionFetch, true, 1, `transactions-${userName}`, [params]);
+  >(transactionFetch, true, 5, `transactions-${userName}`, [
+    params?.get("filterPending"),
+    params?.get("filterConfirmed"),
+  ]);
 
-  return { transactions: data, setScrollEvent, loading };
+  return { transactions: data, setScrollEvent, loading, queryKey };
 };
 
 export default useTransactions;
 
 const transactionFetch: PageFetcher<
-  [ReadonlyURLSearchParams | null],
+  (string | null | undefined)[],
   Transaction[]
 > = async (pageInfo, dependencies) => {
   let filterPending = undefined;
   let filterConfirmed = undefined;
   if (dependencies) {
-    filterPending = dependencies[0]?.get("filterPending") || undefined;
-    filterConfirmed = dependencies[0]?.get("filterConfirmed") || undefined;
+    filterPending = dependencies[0];
+    filterConfirmed = dependencies[1];
   }
   return (
     (

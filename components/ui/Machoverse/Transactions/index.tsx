@@ -17,7 +17,7 @@ const Transactions: FunctionComponent<TransactionsProps> = ({
   return (
     <>
       <Link href={{ query: "filterPending=true" }}>Filter Pending</Link>
-      <TransactionItemList transactions={transactions} />
+      <TransactionItemList />
     </>
   );
 };

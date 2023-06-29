@@ -5,11 +5,13 @@ interface LoadingIconProps {}
 
 const LoadingIcon: FunctionComponent<LoadingIconProps> = () => {
   return (
-    <div className={classes["lds-ellipsis"]}>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div className={classes.container}>
+      <div className={classes["lds-ellipsis"]}>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   );
 };

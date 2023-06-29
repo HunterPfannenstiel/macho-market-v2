@@ -5,19 +5,16 @@ import Button from "../../../Reusable/Buttons/Button";
 import useAnimateModal from "@_hooks/animation/useAnimateModal";
 import Modal from "components/ui/Reusable/Modal";
 import RequestItemList from "../../Inventory/MintRequestModal/RequestItemList";
-import {
-  createMintRequest,
-  mintTransactionToBlockchain,
-} from "@_utils/web3/mint-request";
-import { BrowserProvider } from "ethers";
 import { useMetaMask } from "@_providers/Metamask";
 
 interface TransactionItemProps {
   transaction: Transaction;
+  onClick: (status: string, transactionId: number) => void;
 }
 
 const TransactionItem: FunctionComponent<TransactionItemProps> = ({
   transaction,
+  onClick,
 }) => {
   const { provider } = useMetaMask();
   const tokenModal = useAnimateModal();
@@ -56,12 +53,11 @@ const TransactionItem: FunctionComponent<TransactionItemProps> = ({
           </Button>
           {txState.buttonText && (
             <Button
-            // onClick={buttonAction.bind(
-            //   null,
-            //   txState.status,
-            //   provider,
-            //   transaction.transaction_id
-            // )}
+              onClick={onClick.bind(
+                null,
+                txState.status,
+                transaction.transaction_id
+              )}
             >
               {txState.buttonText}
             </Button>
@@ -94,23 +90,5 @@ const getTransactionState = (
     ? { status: "Pending", buttonText: "Remint", className: classes.pending }
     : { status: "Expired", buttonText: "Reclaim", className: classes.reclaim };
 };
-
-// const buttonAction = async (
-//   status: string,
-//   proivder: BrowserProvider | null,
-//   transactionId: number
-// ) => {
-//   if (status === "Pending") {
-//     createMintRequest(
-//       "Remint",
-//       proivder,
-//       (data) => {
-//         mintTransactionToBlockchain(data, proivder!);
-//       },
-//       undefined,
-//       transactionId
-//     );
-//   }
-// };
 
 export default TransactionItem;

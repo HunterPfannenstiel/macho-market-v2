@@ -1,6 +1,6 @@
 import { FunctionComponent, ReactNode } from "react";
-import classes from "./ScrollComponent.module.css";
-import ScrollIcon from "./LoadingIcon";
+import classes from "./index.module.css";
+import LoadingIcon from "./LoadingIcon";
 
 interface ScrollComponentProps {
   children: ReactNode;
@@ -18,9 +18,12 @@ const ScrollComponent: FunctionComponent<ScrollComponentProps> = ({
   loadingNode,
 }) => {
   return (
-    <ul ref={setScroll} className={className}>
+    <ul
+      ref={setScroll}
+      className={`${classes.scroll} ${className ? className : ""}`}
+    >
       {children}
-      {isFetching ? loadingNode ? loadingNode : <ScrollIcon /> : <></>}
+      {isFetching ? loadingNode ? loadingNode : <LoadingIcon /> : <></>}
     </ul>
   );
 };

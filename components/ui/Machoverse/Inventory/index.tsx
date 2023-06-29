@@ -45,7 +45,6 @@ const MachoInventory: FunctionComponent<InventoryProps> = ({}) => {
         onTokenClicked={tokens.updateSelectedToken}
         selectedTokens={tokens.selectedTokens}
         getSelectedTokenData={tokens.getSelectedTokenData}
-        updateSelectedTokenValue={tokens.updateSelectedTokenValue}
         selectedTokenValues={tokens.selectedTokenValues}
         onConfirmTransaction={createDBRequest}
         modalProps={mintRequestModal}

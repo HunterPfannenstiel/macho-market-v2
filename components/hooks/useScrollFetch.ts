@@ -17,31 +17,31 @@ const useScrollFetch = <T extends Array<any>, U extends Array<any>>(
   const fetching = useRef(isInitialFetcher);
   const scrollHandler = useRef<any>(null);
   const scrollElement = useRef<HTMLElement>();
-  const queryKey = [key, fetchDependency];
-  const queryClient = useQueryClient();
-  const queryFn = async (pageNumber: number) => {
-    console.log("CALL", pageNumber);
+  const queryKey = [key, [...fetchDependency]];
+  const queryFn = async ({ pageParam = 0 }) => {
     fetching.current = true;
     const res = await fetchFunction(
-      { date: date.current, page: pageNumber, pageSize },
+      { date: date.current, page: pageParam, pageSize },
       fetchDependency
     );
     if (res.length < pageSize) endOfContent.current = true;
-    else page.current = pageNumber + 1;
     fetching.current = false;
-    console.log(`RES ${pageNumber}`, res);
     return res;
   };
-  const { data, fetchNextPage, isFetching, status } = useInfiniteQuery<U>({
-    queryKey,
-    queryFn: ({ pageParam }) => queryFn(pageParam),
-    getNextPageParam: () => {
-      console.log("NEXT PAGE PARAM");
-      return endOfContent.current ? undefined : page.current;
-    },
-    enabled: page.current !== undefined,
-    refetchOnWindowFocus: false,
-  });
+  const { data, fetchNextPage, isFetching, status, hasNextPage } =
+    useInfiniteQuery<U>({
+      queryKey,
+      queryFn,
+      getNextPageParam: (_lastPage, pages) => {
+        if (pages[pages.length - 1].length < pageSize) {
+          endOfContent.current = true;
+          return undefined;
+        } else {
+          return pages.length;
+        }
+      },
+      refetchOnWindowFocus: false,
+    });
 
   const setScrollEvent = (elem: HTMLElement | null) => {
     if (elem) {
@@ -65,15 +65,13 @@ const useScrollFetch = <T extends Array<any>, U extends Array<any>>(
   };
 
   useEffect(() => {
-    queryClient.invalidateQueries(queryKey);
+    console.log("Dep change");
     endOfContent.current = false;
     page.current = 0;
     date.current = new Date().toUTCString();
-
-    fetchNextPage();
   }, [...fetchDependency]);
 
-  return { data, loading: isFetching, setScrollEvent, status };
+  return { data, loading: isFetching, setScrollEvent, status, queryKey };
 };
 
 export default useScrollFetch;
