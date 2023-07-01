@@ -9,8 +9,6 @@ interface InventoryProps {
   onTokenClicked: (id: number) => void;
   selectedTokens: Selections;
   getSelectedTokenData: () => UserToken[];
-  selectedTokenValues: { [id: number]: number };
-  updateSelectedTokenValue: (id: number, amount: number) => void;
   onConfirmTransaction: (tokens: UserToken[]) => Promise<void>;
   modalProps: ModalProps;
 }
@@ -20,14 +18,12 @@ const Inventory: FunctionComponent<InventoryProps> = ({
   onTokenClicked,
   selectedTokens,
   getSelectedTokenData,
-  selectedTokenValues,
-  updateSelectedTokenValue,
   onConfirmTransaction,
   modalProps,
 }) => {
-  const onMintRequest = () => {
-    const tokens: UserToken[] = Object.keys(selectedTokenValues).map((key) => {
-      return { tokenId: +key, amount: selectedTokenValues[+key] };
+  const onMintRequest = (selectedValues: { [id: number]: number }) => {
+    const tokens: UserToken[] = Object.keys(selectedValues).map((key) => {
+      return { tokenId: +key, amount: selectedValues[+key] };
     });
     onConfirmTransaction(tokens);
   };
@@ -40,8 +36,6 @@ const Inventory: FunctionComponent<InventoryProps> = ({
       />
       {modalProps.showModal && (
         <MintRequestModal
-          selectedTokenValues={selectedTokenValues}
-          updateSelectedTokenValue={updateSelectedTokenValue}
           onConfirmTransaction={onMintRequest}
           modalProps={modalProps}
           selectedTokens={getSelectedTokenData()}

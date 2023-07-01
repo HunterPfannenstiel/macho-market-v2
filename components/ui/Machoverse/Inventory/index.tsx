@@ -9,10 +9,9 @@ import Inventory from "@_reuseable/Machoverse/Inventory";
 import { mintTransactionToBlockchain } from "@_utils/web3/mint-request";
 import { useMetaMask } from "@_providers/Metamask";
 import Link from "next/link";
+import { useWalletState } from "@_providers/WalletState";
 
-interface InventoryProps {
-  // tokens: UserToken[];
-}
+interface InventoryProps {}
 
 const MachoInventory: FunctionComponent<InventoryProps> = ({}) => {
   const onConfirmMint = async (data?: TransactionInfo) => {
@@ -22,11 +21,15 @@ const MachoInventory: FunctionComponent<InventoryProps> = ({}) => {
     }
   };
   const mintRequestModal = useAnimateModal();
+  const { checkWalletState } = useWalletState();
   const tokens = useHandleTokens(onConfirmMint, mintRequestModal.toggle);
   const { provider } = useMetaMask();
 
   const createDBRequest = async (updateTokens: UserToken[]) => {
-    tokens.updateTokenValues(updateTokens);
+    const validState = await checkWalletState();
+    if (validState) {
+      tokens.updateTokenValues(updateTokens);
+    }
   };
   return (
     <>
@@ -45,7 +48,6 @@ const MachoInventory: FunctionComponent<InventoryProps> = ({}) => {
         onTokenClicked={tokens.updateSelectedToken}
         selectedTokens={tokens.selectedTokens}
         getSelectedTokenData={tokens.getSelectedTokenData}
-        selectedTokenValues={tokens.selectedTokenValues}
         onConfirmTransaction={createDBRequest}
         modalProps={mintRequestModal}
       />

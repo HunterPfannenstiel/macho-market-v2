@@ -49,7 +49,7 @@ export const mintTransactionToBlockchain = async (
     const contract = await loadMachoverse(provider!);
     const tx = await contract.mintTokens(data, signature);
   } catch (error: any) {
-    console.log("ERROR", error.message);
+    console.log("ERROR", error);
   }
   console.log("contract loaded");
 };

@@ -2,6 +2,8 @@ import Providers from "@_providers/Machoverse/Providers";
 import PageHeading from "@_reuseable/Header/PageHeading";
 import { SessionDetails } from "@_types/machoverse";
 import Header from "components/ui/Machoverse/Header";
+import Web3API from "custom-objects/Fetch/API";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 const DashboardLayout = async ({
@@ -22,23 +24,15 @@ const DashboardLayout = async ({
 };
 
 const fetchSession = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_DOMAIN}/database/web/session-info`,
-    { headers: { Cookie: cookies().toString() }, cache: "no-store" }
+  const res = await Web3API.Get(
+    "/database/web/session-info",
+    cookies().toString()
   );
-  let data: any;
-  try {
-    data = await res.json();
-  } catch (error) {
-    console.log("No json");
+  if (!res.success) {
+    console.error(res.errorMessage);
+    return { isSignedIn: false };
   }
-
-  if (!res.ok) {
-    console.log("error", data);
-    return;
-  }
-  console.log("Fetched", data);
-  return data as SessionDetails;
+  return res.data as SessionDetails;
 };
 
 export default DashboardLayout;

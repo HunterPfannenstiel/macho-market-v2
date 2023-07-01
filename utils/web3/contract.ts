@@ -2,7 +2,7 @@ import { MachoverseContract } from "@_types/machoverse/MachoverseContract";
 import { MarketAPI } from "custom-objects/Fetch/API";
 import { BrowserProvider, ethers } from "ethers";
 
-const NETWORK_ID = process.env.NEXT_PUBLIC_NETWORK_ID;
+const NETWORK_ID = process.env.NEXT_PUBLIC_NETWORK_ID_NUM;
 
 export const loadContract = async (name: string, provider: BrowserProvider) => {
   if (!NETWORK_ID) {

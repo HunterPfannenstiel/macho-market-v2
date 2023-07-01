@@ -7,17 +7,17 @@ const useHandleTokens = (
   dbToBlockDelegate: SuccessDelegate,
   blockToDBDelegate: () => void
 ) => {
-  const { tokens, removeFromTokenState, tokenLocation } = useUpdateTokens(
-    dbToBlockDelegate,
-    blockToDBDelegate
-  );
   const [selectedTokens, setSelectedTokens] = useState<Selections>({});
   const selectedTokenValues = useRef<{ [id: number]: number }>({});
+  const { tokens, removeFromTokenState, tokenLocation } = useUpdateTokens(
+    dbToBlockDelegate,
+    blockToDBDelegate,
+    setSelectedTokens.bind(null, {})
+  );
 
   const updateTokenValues = (updateTokens: UserToken[]) => {
     removeFromTokenState(updateTokens);
     selectedTokenValues.current = {};
-    setSelectedTokens({});
   };
 
   const updateSelectedTokenValue = (id: number, value: number) => {

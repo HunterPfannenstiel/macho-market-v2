@@ -85,11 +85,13 @@ type APIErrorResponse = {
   errorMessage: string;
   success: false;
   data: undefined;
+  status: number;
 };
 type APISuccessResponse<T> = {
   errorMessage: undefined;
   success: true;
   data: T;
+  status: number;
 };
 
 const handleResponse = async <T>(res: Response): Promise<APIResponse<T>> => {
@@ -97,12 +99,17 @@ const handleResponse = async <T>(res: Response): Promise<APIResponse<T>> => {
   try {
     const data = await res.json();
     if (!res.ok) return getErrorMessage(res, data);
-    return { data, success: true, errorMessage: undefined };
+    return { data, success: true, errorMessage: undefined, status: res.status };
   } catch (error) {
     if (!res.ok) {
       return getErrorMessage(res);
     } else {
-      return { success: true, errorMessage: undefined, data };
+      return {
+        success: true,
+        errorMessage: undefined,
+        data,
+        status: res.status,
+      };
     }
   }
 };
@@ -113,6 +120,7 @@ const getErrorMessage = (res: Response, data?: any): APIErrorResponse => {
       errorMessage: "Unexpected server error",
       success: false,
       data: undefined,
+      status: res.status,
     };
   } else {
     if (res.status >= 500) {
@@ -120,9 +128,15 @@ const getErrorMessage = (res: Response, data?: any): APIErrorResponse => {
         errorMessage: "Unexpected server error",
         success: false,
         data: undefined,
+        status: res.status,
       };
     } else {
-      return { errorMessage: data.message, success: false, data: undefined };
+      return {
+        errorMessage: data.message,
+        success: false,
+        data: undefined,
+        status: res.status,
+      };
     }
   }
 };

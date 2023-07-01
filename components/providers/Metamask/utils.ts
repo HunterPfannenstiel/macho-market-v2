@@ -8,7 +8,13 @@ declare global {
 }
 
 export const getInitialContext = (): MetaMaskContext => {
-  return { ...getIntitialMetaMaskDetails(), account: "", chainId: null };
+  return {
+    ...getIntitialMetaMaskDetails(),
+    account: "",
+    chainId: null,
+    correctChainId: null,
+    isCorrectChain: null,
+  };
 };
 
 export type MetaMaskDetails =
@@ -26,6 +32,8 @@ export type MetaMaskDetails =
 export type MetaMaskContext = MetaMaskDetails & {
   account: string | null;
   chainId: string | null;
+  correctChainId: string | null;
+  isCorrectChain: boolean | null;
 };
 
 export const getIntitialMetaMaskDetails = (): MetaMaskDetails => {
@@ -53,3 +61,10 @@ export const chainIdToName = {
   "0x5": "Goerli",
   "0xa4b1": "Arbitrum",
 } as { [key: string]: string };
+
+export const changeChain = async (chainId: string) => {
+  await window?.ethereum?.request({
+    method: "wallet_switchEthereumChain",
+    params: [{ chainId }],
+  });
+};

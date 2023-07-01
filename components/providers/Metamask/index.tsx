@@ -31,9 +31,17 @@ const MetaMaskProvider: FunctionComponent<MetaMaskProviderProps> = ({
       window?.ethereum?.removeListener("chainChanged", reloadPage);
     };
   }, []);
+  const chainId = window?.ethereum?.chainId;
+  const correctChainId = process.env.NEXT_PUBLIC_NETWORK_ID!;
   return (
     <MetaMask.Provider
-      value={{ ...metaMask, account, chainId: window?.ethereum?.chainId }}
+      value={{
+        ...metaMask,
+        account,
+        chainId: window?.ethereum?.chainId,
+        correctChainId,
+        isCorrectChain: chainId === correctChainId,
+      }}
     >
       {children}
     </MetaMask.Provider>

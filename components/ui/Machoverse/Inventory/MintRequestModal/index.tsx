@@ -3,16 +3,13 @@ import classes from "./index.module.css";
 import Modal from "components/ui/Reusable/Modal";
 import { ModalProps } from "@_types/index";
 import RequestItemList from "./RequestItemList";
-import { TransactionInfo, UserToken } from "@_types/machoverse";
+import { UserToken } from "@_types/machoverse";
 import Button from "components/ui/Reusable/Buttons/Button";
-import { BrowserProvider } from "ethers";
-import { createMintRequest } from "@_utils/web3/mint-request";
 
 interface MintRequestModalProps {
   modalProps: ModalProps;
   selectedTokens: UserToken[];
-  onConfirmTransaction: () => void;
-  selectedTokenValues: { [id: number]: number };
+  onConfirmTransaction: (selectValues: { [id: number]: number }) => void;
 }
 
 const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
@@ -25,7 +22,7 @@ const MintRequestModal: FunctionComponent<MintRequestModalProps> = ({
     selectedTokenValues.current[id] = value;
   };
   const onClick = () => {
-    onConfirmTransaction;
+    onConfirmTransaction(selectedTokenValues.current);
     selectedTokenValues.current = {};
   };
   return (

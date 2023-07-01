@@ -9,7 +9,8 @@ export type SuccessDelegate = (data?: TransactionInfo) => void;
 
 const useUpdateTokens = (
   dbToBlockDelegate: SuccessDelegate,
-  blockToDBDelegate: () => void
+  blockToDBDelegate: () => void,
+  clearTokens: () => void
 ) => {
   const { provider } = useMetaMask();
   const { key, tokens, tokenLocation } = useInventoryTokens();
@@ -59,10 +60,12 @@ const useUpdateTokens = (
       } else {
         blockToDBDelegate();
       }
+      clearTokens();
     },
   });
 
   const mutateTokens = (tokens: UserToken[]) => {
+    console.log("Mutate");
     mutate({ tokenLocation, tokens, provider });
   };
 
